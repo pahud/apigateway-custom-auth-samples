@@ -1,23 +1,25 @@
 APPNAME ?= main
 
-.PHONY: deps clean build
-
+.PHONY: deps
 deps:
 	go get -u ./...
 
+.PHONY: clean
 clean: 
-	rm -rf ./hello-world/hello-world
+	rm -rf ./src/main ./src/Gopkg.* ./src/vendor .cache
 	
-# build:
-# 	GOOS=linux GOARCH=amd64 go build -o hello-world/hello-world ./hello-world
+	GOOS=linux GOARCH=amd64 go build -o hello-world/hello-world ./hello-world
 
 .PHONY: build
 build:
 ifeq ($(GOOS),darwin)
-	@docker run -ti --rm -v $(shell pwd):/go/src/myapp.github.com -w /go/src/myapp.github.com  golang:1.12 /bin/sh -c "make build-darwin"
+	@docker run -ti --rm \
+	-v $(shell pwd)/src:/go/src/myapp.github.com \
+	-v $(shell pwd)/Makefile:/go/src/myapp.github.com/Makefile \
+	-w /go/src/myapp.github.com  golang:1.12 /bin/sh -c "make build-darwin"
 else
 	@docker run -ti --rm \
-	-v $(shell pwd)/hello-world:/go/src/myapp.github.com \
+	-v $(shell pwd)/src:/go/src/myapp.github.com \
 	-v $(shell pwd)/Makefile:/go/src/myapp.github.com/Makefile \
 	-w /go/src/myapp.github.com  golang:1.12 /bin/sh -c "make build-linux"
 endif

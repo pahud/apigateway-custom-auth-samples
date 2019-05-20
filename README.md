@@ -1,8 +1,8 @@
 # apigateway-custom-auth-samples
 
-## validate-header
+## header-validator
 
 custom authorizer sample to validate required header
 
-[view details](sam-app/validate-header/)
+[view details](header-validator/)
 
